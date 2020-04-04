@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Minds</string>
+    <string name="logo">Logo</string>
+    <string name="minds">minds.</string>
+    <string name="register">register</string>
+    <string name="login">Login</string>
+    <string name="continua">continue</string>
+    <string name="topMenu_text">""</string>
+    <string name="registerEmail">Email</string>
+    <string name="registerFName">First Name</string>
+    <string name="registerSName">Second Name</string>
+    <string name="registerPassword">Password</string>
+    <string name="warning">Warning</string>
+    <string name="warning_text">Your possibilities will be restricted. (You won\'t be able to add content)</string>
+    <string name="continue_remember">Don\'t Show Again</string>
+    <string name="courses_list">.</string>
+    <string name="my_account">.</string>
+    <string name="choose_course">Choose Course</string>
+    <string name="choose_year">Choose Year</string>
+    <string name="year_1">Year 1</string>
+    <string name="year_2">Year 2</string>
+    <string name="year_3">Year 3</string>
+    <string name="year_4">Year 4</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

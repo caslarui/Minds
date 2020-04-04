@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "771842227619",
+    "firebase_url": "https://mins-11d22.firebaseio.com",
+    "project_id": "mins-11d22",
+    "storage_bucket": "mins-11d22.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771842227619:android:996a625c619cb7973bae16",
+        "android_client_info": {
+          "package_name": "com.example.minds"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "771842227619-9ffmp5h1q5ba9mlapj0o43kqbg38tcop.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-_T7PE028O3UNBigmbXm3JfwFE6q0ceA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "771842227619-9ffmp5h1q5ba9mlapj0o43kqbg38tcop.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

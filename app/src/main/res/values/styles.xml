@@ -1,0 +1,26 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="WelcomePage" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/gradientStart</item>
+        <item name="colorPrimaryDark">@color/gradientFinish</item>
+        <item name="colorAccent">@color/gradientStart</item>
+    </style>
+
+    <style name="MainPages" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/gradientStart</item>
+        <item name="colorPrimaryDark">@color/gradientStart</item>
+        <item name="colorAccent">@color/gradientStart</item>
+    </style>
+
+    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/dialog_bg</item>
+    </style>
+
+    <style name="BottomMenu" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:textSize">30sp</item>
+    </style>
+
+
+</resources>
