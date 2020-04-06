@@ -30,7 +30,7 @@ public class CourseSelector extends AppCompatActivity {
 
         topMenuText.setText("Main Page");
 
-        openFragment(new HomeFragment());
+//        openFragment(new HomeFragment());
 
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 

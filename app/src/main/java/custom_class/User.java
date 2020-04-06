@@ -11,12 +11,14 @@ public class User {
     private String mSName;
     // custom_files.User UID
     private String mUID;
+    // custom_files.User Image
+    private String mImage;
     // custom_files.User Password
     private String mPassword;
     // This is the List of Files uploaded by the current custom_files.User
-    private List<File> mUploads;
+    private List<String> mUploads;
     // This is the List of Files marked as "Add to favorites" by the current custom_files.User
-    private List<File> mFavorites;
+    private List<String> mFavorites;
 
     public User() {
         mEmail = mFName = mSName = mPassword = mUID = null;
@@ -28,14 +30,15 @@ public class User {
         this.mFName = mFName;
         this.mSName = mSName;
         this.mPassword = mPassword;
+        this.mImage = "User/Photos/default/default.png";
         mUploads = mFavorites = null;
     }
 
-    public int addUpload(File toUpload) {
+    public int addUpload(String toUpload) {
         try {
             mUploads.add(toUpload);
         } catch (ArrayStoreException e) {
-            System.out.println("Failed to add custom_files.File < " + toUpload.getmTitle() + " > to " +
+            System.out.println("Failed to add custom_files.File < " + toUpload + " > to " +
                     "uploads due to error :" + e.getMessage());
             return Constants.FILE_TO_UPLOADS_FAILURE;
         }
@@ -46,14 +49,14 @@ public class User {
         return mUID;
     }
 
-    public int addFavorite(File toFavorites) {
+    public int addFavorite(String toFavorites) {
         if(mFavorites.contains(toFavorites) || mUploads.contains(toFavorites)) {
             return Constants.FILE_ALREADY_EXISTS;
         } else {
             try {
                 mFavorites.add(toFavorites);
             } catch (ArrayStoreException e) {
-                System.out.println("Failed to add custom_files.File < " + toFavorites.getmTitle() + " > to " +
+                System.out.println("Failed to add custom_files.File < " + toFavorites + " > to " +
                         "favorites due to error :" + e.getMessage());
                 return Constants.FILE_TO_FAVORITES_FAILURE;
             }
@@ -77,11 +80,11 @@ public class User {
         return mSName;
     }
 
-    public List<File> getmUploads() {
+    public List<String> getmUploads() {
         return mUploads;
     }
 
-    public List<File> getmFavorites() {
+    public List<String> getmFavorites() {
         return mFavorites;
     }
 

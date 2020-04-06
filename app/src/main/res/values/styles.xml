@@ -21,6 +21,9 @@
     <style name="BottomMenu" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="android:textSize">30sp</item>
     </style>
+    <style name="NoShadowButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:stateListAnimator">@null</item>
+    </style>
 
 
 </resources>

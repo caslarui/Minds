@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -79,9 +80,12 @@ public class MainActivity extends AppCompatActivity {
         window.setView(continueWindow);
 
         Button          continueDialogBtn;
+        CheckBox        checkBox;
+
+        continueDialogBtn = (Button) continueWindow.findViewById(R.id.continueDialogBtn);
+        checkBox = (CheckBox) continueWindow.findViewById(R.id.checkBox);
 
         window.show();
-
     }
 
     private void showLoginWindow() {
