@@ -2,7 +2,6 @@ package com.example.minds;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -17,7 +16,6 @@ import fragments.MyAccount;
 
 public class CourseSelector extends AppCompatActivity {
 
-    private Toolbar                 topMenu;
     private TextView                topMenuText;
     private BottomNavigationView    bottomNavigationView;
 
@@ -30,8 +28,7 @@ public class CourseSelector extends AppCompatActivity {
 
         topMenuText.setText("Main Page");
 
-//        openFragment(new HomeFragment());
-
+        openFragment(new HomeFragment());
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
     }
@@ -43,11 +40,9 @@ public class CourseSelector extends AppCompatActivity {
             Fragment selectedFragment = null;
             switch (item.getItemId()) {
                 case R.id.listBtn :
-                    topMenuText.setText("Main Page");
                     selectedFragment = new HomeFragment();
                     break;
                 case R.id.accountBtn :
-                    topMenuText.setText("My Account");
                     selectedFragment = new MyAccount();
                     break;
             }
@@ -63,7 +58,6 @@ public class CourseSelector extends AppCompatActivity {
     }
 
     private void initializeControllers() {
-        topMenu = (Toolbar) findViewById(R.id.topMenu);
         topMenuText = (TextView) findViewById(R.id.topMenu_text);
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_navigation);
     }

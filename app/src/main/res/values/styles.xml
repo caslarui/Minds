@@ -24,6 +24,9 @@
     <style name="NoShadowButton" parent="Widget.MaterialComponents.Button">
         <item name="android:stateListAnimator">@null</item>
     </style>
+    <style name="YearBtn" parent="Widget.MaterialComponents.Button">
+        <item name="background">@drawable/year_btn_selector</item>
+    </style>
 
 
 </resources>

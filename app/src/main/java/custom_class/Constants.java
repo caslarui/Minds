@@ -1,6 +1,7 @@
 package custom_class;
 
 public final class Constants {
+
      /*
         Constants for custom_files.File uploading, adding to favorites etc.
      */
@@ -15,7 +16,6 @@ public final class Constants {
     static final int FILE_TO_FAVORITES_SUCCESS = 121;
 
     public static final String TAG = "TAG";
-
 
     private Constants(){
         throw new AssertionError();

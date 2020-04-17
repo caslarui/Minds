@@ -1,16 +1,13 @@
 package fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,19 +18,21 @@ import android.widget.Toast;
 
 import com.example.minds.MainActivity;
 import com.example.minds.R;
+import com.example.minds.UploadFilePage;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.squareup.picasso.Picasso;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+import java.util.Objects;
 
 public class MyAccount extends Fragment {
 
+    private final String mFragmentName = "My Account";
+
     private TextView            userName;
+    private TextView            topMenuText;
     private FirebaseAuth        fireAuth;
     private FirebaseFirestore   fireStore;
     private Button              myDocs;
@@ -54,7 +53,9 @@ public class MyAccount extends Fragment {
 
         initializeControllers(view);
 
+        topMenuText.setText(mFragmentName);
 
+        // If the user is not authenticated hide the Button for Upload, My Docs and Settings
         if (fireAuth.getCurrentUser() == null) {
             myDocs.setVisibility(View.GONE);
             uploads.setVisibility(View.GONE);
@@ -67,9 +68,26 @@ public class MyAccount extends Fragment {
                 }
             });
         }
+
+        // If the User is authenticated then show the user name
         getUserName();
 
+        uploads.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent uploadPage = new Intent(v.getContext(), UploadFilePage.class);
+                v.getContext().startActivity(uploadPage);
+            }
+        });
+
         return view;
+    }
+
+    public void openFragment(Fragment fragment) {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.commit();
     }
 
     private void initializeControllers(View v) {
@@ -81,6 +99,7 @@ public class MyAccount extends Fragment {
         settings = (Button) v.findViewById(R.id.account_SettingsBtn);
         logout = (Button) v.findViewById(R.id.account_LogOut);
         btn_layout = (LinearLayout) v.findViewById(R.id.layout_btn);
+        topMenuText = (TextView) Objects.requireNonNull(getActivity()).findViewById(R.id.topMenu_text);
     }
 
     private void getUserName() {

@@ -22,8 +22,77 @@
     <string name="year_3">Year 3</string>
     <string name="year_4">Year 4</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="Year1_list">
+        <item>Mathematical Analysis 1</item>
+        <item>Algebra and Geometry</item>
+        <item>Physics 1</item>
+        <item>Computers Programming</item>
+        <item>Fundamentals of Electrical Engineering 1</item>
+        <item>Chemistry</item>
+        <item>Foreign Language 1</item>
+        <item>Physical Education and Sport 1 </item>
+        <item>Mathematical Analysis 2</item>
+        <item>Physics 2</item>
+        <item>Algorithms and Data Structures </item>
+        <item>Fundamentals of Electrical Engineering 2</item>
+        <item>METc</item>
+        <item>Special Mathematics</item>
+    </string-array>
+    <string-array name="Year2_list">
+        <item>Signals and Systems</item>
+        <item>Electronic Materials</item>
+        <item>Electronic Devices</item>
+        <item>Passive Components and Circuits</item>
+        <item>Object Oriented Programming</item>
+        <item>Project - Signals and programming</item>
+        <item>Basic Electronic Circuits</item>
+        <item>Digital Integrated Circuits</item>
+        <item>Microprocessor Architecture</item>
+        <item>Circuits Analysis and Synthesis</item>
+        <item>Electronic Circuits - Laboratory</item>
+        <item>Physical Education and Sport 4 </item>
+    </string-array>
+    <string-array name="Year3_list">
+        <item>Teoria transmisiunii informaţiei</item>
+        <item>Microunde</item>
+        <item>Circuite integrate analogice</item>
+        <item>Instrumentaţie electronică de măsură</item>
+        <item>Microcontrolere</item>
+        <item>Examen de certificare competenţe de programare</item>
+        <item>Proiect 1 - Dispozitive şi circuite electronice</item>
+        <item>Activitate pregătire Proiect 2 </item>
+        <item>Decizie şi estimare în prelucrarea informaţiilor</item>
+        <item>Prelucrarea digitala a semnalelor</item>
+        <item>Televiziune</item>
+        <item>Tehnologii de programare în Internet</item>
+        <item>Tehnici de optimizare în programare</item>
+        <item>Arhitectura sistemelor de calcul</item>
+        <item>Sisteme de operare</item>
+    </string-array>
+    <string-array name="Year4_list">
+        <item>Reţele de calculatoare</item>
+        <item>Proiectarea bazelor de date </item>
+        <item>Recunoaşterea formelor şi inteligenţă artificială</item>
+        <item>Prelucrarea imaginilor</item>
+        <item>Inginerie software</item>
+        <item>Procesoare de semnal</item>
+        <item>Calitate şi fiabilitate</item>
+        <item>Interfețe om - mașină</item>
+        <item>Calcul paralel</item>
+        <item>Inteligenţă computaţională integrată </item>
+        <item>Programare distribuită </item>
+        <item>Tehnici de optimizare în programare</item>
+        <item>Analiza imaginilor</item>
+        <item>Criptografie şi protecţia datelor</item>
+    </string-array>
+    <string-array name="Year_list">
+        <item>Year 1</item>
+        <item>Year 2</item>
+        <item>Year 3</item>
+        <item>Year 4</item>
+    </string-array>
+
     <string name="my_docs">My Docs</string>
     <string name="upload">Upload</string>
     <string name="settings">Settings</string>
@@ -31,4 +100,12 @@
     <string name="register_image">Register_Image</string>
     <string name="login_img">Login_Img</string>
     <string name="continue_img">Continue_Img</string>
+    <string name="bullet">bullet</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="choose_file">Choose File</string>
+    <string name="file_name">Enter File Name:</string>
+    <string name="upload_icon">Upload_Icon</string>
+    <string name="description">Description</string>
 </resources>
