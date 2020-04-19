@@ -27,6 +27,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
+import custom_class.Constants;
+
 public class MyAccount extends Fragment {
 
     private final String mFragmentName = "My Account";
@@ -107,7 +109,7 @@ public class MyAccount extends Fragment {
             String uid = fireAuth.getUid();
 
             if (uid != null) {
-                fireStore.collection("users").document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                fireStore.collection(Constants.DB_USERS).document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {

@@ -8,67 +8,65 @@
     android:layout_height="match_parent"
     tools:context=".CourseSelector">
 
-    <!--    <include-->
-    <!--        layout="@layout/bottom_menu"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_alignParentBottom="true"-->
-    <!--        />-->
+
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        >
+        android:layout_height="fill_parent">
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
+            android:orientation="vertical">
+
             <include
-                layout="@layout/top_menu"
                 android:id="@+id/topMenu"
+                layout="@layout/top_menu"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
+
             <TextView
                 android:id="@+id/textChooseFile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat"
-                android:text="@string/choose_file"
                 android:gravity="center"
-                android:textSize="35sp"
-                android:textColor="@color/darkPurple"/>
+                android:text="@string/choose_file"
+                android:textColor="@color/darkPurple"
+                android:textSize="35sp" />
+
             <ImageButton
                 android:id="@+id/chooseFileBtn"
-                android:layout_marginTop="30dp"
                 android:layout_width="110dp"
                 android:layout_height="120dp"
-                android:background="@drawable/ic_import_file"
                 android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/ic_import_file"
                 android:contentDescription="@string/upload_icon" />
 
             <LinearLayout
                 android:id="@+id/fileNameLayout"
-                android:orientation="vertical"
-                android:paddingTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                >
+                android:orientation="vertical"
+                android:paddingTop="20dp">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/file_name"
-                    android:textSize="25sp"
+                    android:fontFamily="@font/montserrat"
                     android:paddingStart="20dp"
                     android:paddingEnd="0dp"
-                    android:fontFamily="@font/montserrat"
-                    android:textColor="@color/darkPurple"/>
+                    android:text="@string/file_name"
+                    android:textColor="@color/darkPurple"
+                    android:textSize="25sp" />
+
                 <View
                     android:layout_width="250dp"
                     android:layout_height="2dp"
                     android:layout_marginStart="20dp"
                     android:alpha="0.5"
                     android:background="@color/darkPurple" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/selectedFileName"
                     android:layout_width="match_parent"
@@ -77,98 +75,104 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="30dp"
                     android:background="@color/silver"
-                    app:helperTextEnabled="true"
+                    app:endIconMode="clear_text"
                     app:errorEnabled="true"
-                    app:endIconMode="clear_text">
+                    app:helperTextEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat"
-                        android:singleLine="true"
                         android:hint="@string/file_name"
                         android:inputType="text"
-                        android:paddingBottom="0dp" />
+                        android:paddingBottom="0dp"
+                        android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/fileYearLayout"
-                android:orientation="vertical"
-                android:paddingTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                >
+                android:orientation="vertical"
+                android:paddingTop="20dp">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/choose_year"
-                    android:textSize="25sp"
+                    android:fontFamily="@font/montserrat"
                     android:paddingStart="20dp"
                     android:paddingEnd="0dp"
-                    android:fontFamily="@font/montserrat"
-                    android:textColor="@color/darkPurple"/>
+                    android:text="@string/choose_year"
+                    android:textColor="@color/darkPurple"
+                    android:textSize="25sp" />
+
                 <View
                     android:layout_width="250dp"
                     android:layout_height="2dp"
                     android:layout_marginStart="20dp"
                     android:alpha="0.5"
                     android:background="@color/darkPurple" />
+
                 <Spinner
                     android:id="@+id/selectedYear"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:entries="@array/Year_list"
                     android:layout_marginTop="10dp"
-                    />
+                    android:entries="@array/Year_list" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/fileCourseLayout"
-                android:orientation="vertical"
-                android:paddingTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                >
+                android:orientation="vertical"
+                android:paddingTop="20dp">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/choose_course"
-                    android:textSize="25sp"
+                    android:fontFamily="@font/montserrat"
                     android:paddingStart="20dp"
                     android:paddingEnd="0dp"
-                    android:fontFamily="@font/montserrat"
-                    android:textColor="@color/darkPurple"/>
+                    android:text="@string/choose_course"
+                    android:textColor="@color/darkPurple"
+                    android:textSize="25sp" />
+
                 <View
                     android:layout_width="250dp"
                     android:layout_height="2dp"
                     android:layout_marginStart="20dp"
                     android:alpha="0.5"
                     android:background="@color/darkPurple" />
+
                 <Spinner
                     android:id="@+id/selectedCourse"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
-                    />
+                    android:layout_marginTop="10dp" />
 
             </LinearLayout>
+
             <LinearLayout
-                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:orientation="vertical"
                 android:paddingBottom="30dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/description"
-                    android:textSize="25sp"
+                    android:fontFamily="@font/montserrat"
                     android:paddingStart="20dp"
                     android:paddingEnd="0dp"
-                    android:fontFamily="@font/montserrat"
-                    android:textColor="@color/darkPurple"/>
+                    android:text="@string/description"
+                    android:textColor="@color/darkPurple"
+                    android:textSize="25sp" />
+
                 <View
                     android:layout_width="250dp"
                     android:layout_height="2dp"
@@ -178,32 +182,40 @@
 
                 <EditText
                     android:id="@+id/fileDesc"
-                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_marginHorizontal="20dp"
-                    android:hint="@string/description"
-                    android:gravity="start"
+                    android:layout_marginTop="10dp"
                     android:background="@color/silver"
+                    android:focusable="true"
                     android:fontFamily="@font/montserrat"
+                    android:gravity="start"
+                    android:hint="@string/description"
                     android:inputType="text"
                     android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
-                    android:focusable="true"
-                    />
+                    android:paddingEnd="5dp" />
+
                 <Button
                     android:id="@+id/uploadBtn"
-                    android:layout_marginTop="20dp"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:backgroundTint="@color/darkPurple"
+                    android:fontFamily="@font/montserrat"
                     android:gravity="center"
                     android:text="@string/upload"
                     android:textAllCaps="true"
-                    android:fontFamily="@font/montserrat"
-                    android:backgroundTint="@color/darkPurple"
-                    android:textSize="25sp"
+                    android:textSize="25sp" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    />
+                    android:minWidth="50dp"
+                    android:minHeight="50dp"
+                    android:visibility="gone" />
             </LinearLayout>
 
         </LinearLayout>

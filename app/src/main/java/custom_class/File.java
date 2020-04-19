@@ -10,8 +10,10 @@ public class File {
     private String mDescription;
     // Reference Link where the file is saved in FireBase.FireStore
     private String mLink;
+
+    private String mFileId;
     // Date of Creation
-    private SimpleDateFormat mCreationDate;
+    private String mCreationDate;
     // Reference Link to Author
     private String mAuthor;
 
@@ -26,7 +28,8 @@ public class File {
         this.mDescription = mDescription;
         this.mLink = mLink;
         this.mAuthor = mAuthor;
-        this.mCreationDate = new SimpleDateFormat("dd-MMMMM-yyyy");
+        this.mFileId = null;
+        this.mCreationDate = new SimpleDateFormat("dd-MMMMM-yyyy").toString();
     }
 
     public String getmTitle() {
@@ -41,11 +44,19 @@ public class File {
         return mLink;
     }
 
-    public SimpleDateFormat getmCreationDate() {
+    public String getmCreationDate() {
         return mCreationDate;
     }
 
     public String getmAuthor() {
         return mAuthor;
+    }
+
+    public String getmFileId() {
+        return mFileId;
+    }
+
+    public void setmLink(String mLink) {
+        this.mLink = mLink;
     }
 }
