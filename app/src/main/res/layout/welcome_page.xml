@@ -55,8 +55,8 @@
                 android:padding="20dp"
                 tools:ignore="NestedWeights"
                 android:adjustViewBounds="true"
-                android:layout_gravity="center"
                 android:scaleType="fitCenter"
+                android:layout_gravity="center"
                 app:srcCompat="@drawable/register_btn"
                 android:contentDescription="@string/register_image" />
 

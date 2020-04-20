@@ -1,6 +1,8 @@
 package fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +44,7 @@ public class MyAccount extends Fragment {
     private Button              uploads;
     private Button              settings;
     private Button              logout;
+    private ProgressBar         mProgressBar;
     private LinearLayout        btn_layout;
 
 
@@ -66,13 +70,38 @@ public class MyAccount extends Fragment {
             logout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    SharedPreferences sp = getContext().getSharedPreferences("My pref", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putBoolean("continue", false);
+                    editor.apply();
                     startActivity(new Intent(getContext(), MainActivity.class));
+                }
+            });
+        } else {
+            logout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    fireAuth.signOut();
+                    SharedPreferences sp = getContext().getSharedPreferences("My pref", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putBoolean("continue", false);
+                    editor.apply();
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                 }
             });
         }
 
         // If the User is authenticated then show the user name
         getUserName();
+
+        myDocs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFragment(new MyDocsList());
+            }
+        });
 
         uploads.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +122,7 @@ public class MyAccount extends Fragment {
     }
 
     private void initializeControllers(View v) {
+        mProgressBar = v.findViewById(R.id.loading_profile);
         userName = (TextView) v.findViewById(R.id.userName);
         fireAuth = FirebaseAuth.getInstance();
         fireStore = FirebaseFirestore.getInstance();
@@ -115,6 +145,7 @@ public class MyAccount extends Fragment {
                         if (documentSnapshot.exists()) {
                             String name = documentSnapshot.get("mFName") + " " + documentSnapshot.get("mSName");
                             userName.setText(name);
+                            mProgressBar.setVisibility(View.INVISIBLE);
                         } else {
                             Toast.makeText(getContext(), "Document Does not Exists", Toast.LENGTH_SHORT).show();
                         }

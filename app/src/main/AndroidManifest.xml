@@ -13,9 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/WelcomePage">
-        <activity android:name=".UploadFilePage"
+        <activity
+            android:name=".UploadFilePage"
             android:screenOrientation="portrait"
-            android:theme="@style/MainPages"/>
+            android:theme="@style/MainPages" />
         <activity
             android:name=".RegisterPage"
             android:screenOrientation="portrait"
@@ -29,6 +30,7 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

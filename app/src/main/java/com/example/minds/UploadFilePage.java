@@ -3,6 +3,8 @@ package com.example.minds;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -32,6 +34,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import custom_class.Constants;
@@ -62,6 +65,8 @@ public class UploadFilePage extends AppCompatActivity {
     private FirebaseAuth            fireAuth;
     private StorageReference        fireStorage;
     private StorageReference        fileReference;
+
+    private StorageTask             mUploadTask;
 
 
     @Override
@@ -138,10 +143,20 @@ public class UploadFilePage extends AppCompatActivity {
 
                 Log.d(Constants.TAG, "\nMy Year is : " + mYear + "\nMy Course is : " + mCourse +
                         "\n My Upload Link is : " + uploadLink + "\n");
-
-                uploadFile();
+                if (mUploadTask != null &&mUploadTask.isInProgress()) {
+                    Toast.makeText(UploadFilePage.this, "Upload in progress", Toast.LENGTH_SHORT).show();
+                } else {
+                    uploadFile();
+                }
+                startActivity(new Intent(getApplicationContext(), CourseSelector.class));
             }
         });
+    }
+
+    private void openFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.commit();
     }
 
     private String getFileExtension(Uri uri) {
@@ -155,14 +170,13 @@ public class UploadFilePage extends AppCompatActivity {
             // Upload File to Storage
             fileReference = fireStorage.child(uploadLink + System.currentTimeMillis()
                     + "." + getFileExtension(mFileUri));
-            fileReference.putFile(mFileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            mUploadTask = fileReference.putFile(mFileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            progressBar.setProgress(0);
                             progressBar.setVisibility(View.GONE);
                         }
                     }, 500);
@@ -170,6 +184,7 @@ public class UploadFilePage extends AppCompatActivity {
 
                     // Get the download Url of File
                     getDownloadUrl(fileReference);
+
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -197,7 +212,9 @@ public class UploadFilePage extends AppCompatActivity {
                         mFileDesc.getText().toString(),
                         downloadUrl,
                         fireAuth.getUid());
+                file.setmExtension(getFileExtension(mFileUri));
                 Log.d(Constants.TAG, "Download Url is : " + downloadUrl + "\n");
+
                 updateDatabase(file);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -215,7 +232,7 @@ public class UploadFilePage extends AppCompatActivity {
             public void onSuccess(DocumentReference documentReference) {
                 fireDatabase.collection("Uploads/" + uploadLink)
                         .document(documentReference.getId())
-                        .update("mFileId", documentReference.getId());
+                        .update("mFileId","Uploads/" + uploadLink + documentReference.getId());
                 addToUserMyDocs(documentReference);
                 Log.d(Constants.TAG, "\n ID is : " + documentReference.getId() + "\n");
             }

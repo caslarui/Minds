@@ -1,5 +1,8 @@
 package custom_class;
 
+import android.util.Log;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -31,7 +34,8 @@ public class User {
         this.mSName = mSName;
         this.mPassword = mPassword;
         this.mImage = "User/Photos/default/default.png";
-        mUploads = mFavorites = null;
+        this.mUploads = new ArrayList<>();
+        this.mFavorites = new ArrayList<>();
     }
 
     public int addUpload(String toUpload) {
@@ -64,6 +68,10 @@ public class User {
         return Constants.FILE_TO_FAVORITES_SUCCESS;
     }
 
+    public void removeFavorite(String fileId) {
+        mFavorites.remove(fileId);
+    }
+
     public void setmUID(String mUID) {
         this.mUID = mUID;
     }
@@ -90,5 +98,15 @@ public class User {
 
     public String getmEmail() {
         return mEmail;
+    }
+
+    public boolean checkFavorite(String fileID) {
+        boolean flag = false;
+        for (String file : mFavorites) {
+            if (fileID.equals(file)) {
+                flag = true;
+            }
+        }
+        return flag;
     }
 }

@@ -18,6 +18,7 @@ public final class Constants {
 
     public static final String TAG = "TAG";
     public static final String DB_USERS = "users";
+    public static final String DB_UPLOADS = "Uploads";
 
     private Constants(){
         throw new AssertionError();

@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +22,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import custom_class.Constants;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +41,14 @@ public class MainActivity extends AppCompatActivity {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(), CourseSelector.class));
             finish();
+        }
+
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            SharedPreferences sp = getApplicationContext().getSharedPreferences("My pref", MODE_PRIVATE);
+            if (sp.getBoolean("continue", true)) {
+                startActivity(new Intent(getApplicationContext(), CourseSelector.class));
+                finish();
+            }
         }
 
         initializeControllers();
@@ -80,10 +92,24 @@ public class MainActivity extends AppCompatActivity {
         window.setView(continueWindow);
 
         Button          continueDialogBtn;
-        CheckBox        checkBox;
+        final CheckBox        checkBox;
 
         continueDialogBtn = (Button) continueWindow.findViewById(R.id.continueDialogBtn);
-        checkBox = (CheckBox) continueWindow.findViewById(R.id.checkBox);
+        checkBox = (CheckBox) continueWindow.findViewById(R.id.checkBox_continue);
+
+        continueDialogBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkBox.isChecked()) {
+                    Log.d(Constants.TAG, "\nContinue CheckBox vas selected : " + true);
+                    SharedPreferences sp = getApplicationContext().getSharedPreferences("My pref", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putBoolean("continue", true);
+                    editor.apply();
+                }
+                startCoursePage(v);
+            }
+        });
 
         window.show();
     }
