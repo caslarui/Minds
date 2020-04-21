@@ -2,18 +2,21 @@ package custom_class;
 
 import android.util.Log;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class User {
+    // custom_files.User UID
+    @Exclude
+    private String mUID;
     // custom_files.User Email
     private String mEmail;
     // custom_files.User First Name
     private String mFName;
     // custom_files.User Second Name
     private String mSName;
-    // custom_files.User UID
-    private String mUID;
     // custom_files.User Image
     private String mImage;
     // custom_files.User Password
@@ -24,8 +27,13 @@ public class User {
     private List<String> mFavorites;
 
     public User() {
-        mEmail = mFName = mSName = mPassword = mUID = null;
-        mUploads = mFavorites = null;
+        mEmail = "";
+        mFName = "";
+        mSName = "";
+        mPassword = "";
+        mUID = "";
+        mUploads = new ArrayList<>();
+        mFavorites = new ArrayList<>();
     }
 
     public User(String mEmail, String mFName, String mSName, String mPassword) {
@@ -47,6 +55,16 @@ public class User {
             return Constants.FILE_TO_UPLOADS_FAILURE;
         }
         return Constants.FILE_TO_UPLOADS_SUCCESS;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "mEmail='" + mEmail + '\'' +
+                ", mUID='" + mUID + '\'' +
+                ", mUploads=" + mUploads +
+                ", mFavorites=" + mFavorites +
+                '}';
     }
 
     public String getmUID() {
@@ -108,5 +126,17 @@ public class User {
             }
         }
         return flag;
+    }
+
+    public String getmImage() {
+        return mImage;
+    }
+
+    public boolean isAuthor(final String fileLink) {
+        return mUploads.contains(fileLink);
+    }
+
+    public void removeUpload(final String fileID) {
+        mUploads.remove(fileID);
     }
 }

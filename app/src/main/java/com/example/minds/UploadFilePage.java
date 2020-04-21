@@ -168,7 +168,7 @@ public class UploadFilePage extends AppCompatActivity {
     private void uploadFile() {
         if (mFileUri != null) {
             // Upload File to Storage
-            fileReference = fireStorage.child(uploadLink + System.currentTimeMillis()
+            fileReference = fireStorage.child(uploadLink + mFileName.getEditText().getText().toString()
                     + "." + getFileExtension(mFileUri));
             mUploadTask = fileReference.putFile(mFileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override

@@ -1,7 +1,14 @@
 package custom_class;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.minds.R;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -31,7 +39,6 @@ import java.util.List;
 public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileViewHolder> {
     private Context mContext;
     private List<File> mFiles;
-    private User mCurrentUser;
     private OnItemClickListener listener;
 
     public FileAdapter(final Context context, List<File> files) {
@@ -46,17 +53,21 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileViewHolder
     }
 
     private void openFileDescription(final File item) {
-        AlertDialog.Builder window = new AlertDialog.Builder(mContext, R.style.CustomAlertDialog);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.CustomAlertDialog);
+        final AlertDialog window;
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View fileDescription = inflater.inflate(R.layout.file_description_window, null);
-        window.setView(fileDescription);
+        builder.setView(fileDescription);
+
+        window = builder.create();
+        window.show();
 
         final ImageView mFileImg = fileDescription.findViewById(R.id.file_img);
-        final TextView  mFileName = fileDescription.findViewById(R.id.file_name);
-        final TextView  mFileDate = fileDescription.findViewById(R.id.file_date);
-        final TextView  mFileAuthor = fileDescription.findViewById(R.id.file_author);
-        final TextView  mFileDesc = fileDescription.findViewById(R.id.file_desc);
-        Button downloadBtn = fileDescription.findViewById(R.id.download_Btn);
+        final TextView mFileName = fileDescription.findViewById(R.id.file_name);
+        final TextView mFileDate = fileDescription.findViewById(R.id.file_date);
+        final TextView mFileAuthor = fileDescription.findViewById(R.id.file_author);
+        final TextView mFileDesc = fileDescription.findViewById(R.id.file_desc);
+        final Button downloadBtn = fileDescription.findViewById(R.id.download_Btn);
         final Button favoriteBtn = fileDescription.findViewById(R.id.favorites_btn);
 
         loadImage(item, mFileImg);
@@ -65,117 +76,193 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileViewHolder
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             favoriteBtn.setVisibility(View.INVISIBLE);
         } else {
-            loadUser();
-            if (mCurrentUser != null) {
-                Log.d("TAG", mCurrentUser.getmFavorites().toString());
-            } else {
-                    Log.d("TAG", "\n\nNULL USER\n\n");
-            }
-//            if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(item.getmAuthor())) {
-//                favoriteBtn.setText("Remove File");
-//                favoriteBtn.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        removeFile(item);
-//                    }
-//                });
-//            } else {
-//                Log.d("TAG", "favorites size : " + favorites.size());
-//                if (favorites.contains(item.getmFileId())) {
-//                    Log.d("TAG", "\n\nCEVA\n\n");
-//                    favoriteBtn.setText("Remove Favorite");
-//                    favoriteBtn.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            removeFromFavorites(item);
-//                            favoriteBtn.setText("Add To Favorites");
-//                        }
-//                    });
-//                } else {
-//                    favoriteBtn.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            Log.d(Constants.TAG, "File is not in favorites\n");
-//                            addToFavorites(item);
-//                            favoriteBtn.setText("Remove Favorite");
-//                        }
-//                    });
-//                }
-//            }
+            loadUser(new MyCallBack() {
+                @Override
+                public void onCallback(final User mUser) {
+                    if (mUser.isAuthor(item.getmFileId())) {
+                        favoriteBtn.setText("Remove File");
+                        favoriteBtn.setOnClickListener(
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        mUser.removeUpload(item.getmFileId());
+                                        removeFileFromUserUploads(mUser, item.getmFileId());
+                                        removeFileFromStorage(item);
+                                        removeFileFromDataBase(item.getmFileId());
+                                        Toast.makeText(mContext, "File Removed", Toast.LENGTH_SHORT).show();
+                                        window.dismiss();
+                                        removeFileFromAdapter(item);
+                                    }
+                                }
+                        );
+                    } else {
+                        if (mUser.checkFavorite(item.getmFileId())) {
+                            favoriteBtn.setText("Remove Favorite");
+                            favoriteBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    favoriteBtn.setText("Add to Favorites");
+                                    mUser.removeFavorite(item.getmFileId());
+                                    updateFavorites(mUser);
+                                    Toast.makeText(mContext, "Removed From Favorites", Toast.LENGTH_SHORT).show();
+                                    window.dismiss();
+                                    removeFileFromAdapter(item);
+                                }
+                            });
+                        } else {
+                            favoriteBtn.setText("Add to Favorites");
+                            favoriteBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    favoriteBtn.setText("Remove Favorite");
+                                    mUser.addFavorite(item.getmFileId());
+                                    updateFavorites(mUser);
+                                    Toast.makeText(mContext, "Added to Favorites", Toast.LENGTH_SHORT).show();
+                                    window.dismiss();
+                                }
+                            });
+                        }
+                    }
+                }
+            });
         }
 
+        downloadBtn.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+                if(ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                    // this will request for permission when permission is not true
+                }else{
+                    // Download code here
+                    downloadFileFrom(item);
+                }
+            }
+        });
 
-        window.show();
     }
 
-    private void loadUser() {
-        final String uID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        FirebaseFirestore.getInstance()
-                .collection(Constants.DB_USERS)
-                .document(uID)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            User user = documentSnapshot.toObject(User.class);
-                            if (user != null) {
-                                mCurrentUser = documentSnapshot.toObject(User.class);
-                            } else {
-                                Log.d(Constants.TAG, "Failed to update User, user == null");
+    private void downloadFileFrom(final File item) {
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(item.getmLink()));
+        String fileName = item.getmTitle() + "." + item.getmExtension();
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
+        request.setTitle(fileName);
+        request.setDescription("Download.....");
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+
+        DownloadManager manager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
+        manager.enqueue(request);
+
+    }
+
+    private void removeFileFromDataBase(final String getmFileId) {
+        FirebaseFirestore
+                .getInstance()
+                .document(getmFileId)
+                .delete()
+                .addOnSuccessListener(
+                        new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(Constants.TAG, "File ["
+                                        + getmFileId + "] deleted from database");
                             }
                         }
-                    }
-                });
+                );
     }
 
-    private void removeFromFavorites(final File item) {
-        final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        FirebaseFirestore.getInstance().collection(Constants.DB_USERS)
-                .document(uid).get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        User user = documentSnapshot.toObject(User.class);
-                        if (user != null) {
-                            user.removeFavorite(item.getmFileId());
-                            FirebaseFirestore.getInstance().collection(Constants.DB_USERS)
-                                    .document(uid).update("mFavorites", user.getmFavorites());
-                        } else {
-                            Log.d(Constants.TAG, "User == null \n");
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(Constants.TAG, e.getMessage() + " \n");
-            }
-        });
+    private void removeFileFromStorage(final File item) {
+        String fileUrl = "";
+        String[] words = item.getmFileId().split("/");
+        for(String word : words) {
+            if (word.equals(words[words.length - 1]))
+                break;
+            fileUrl += word + "/";
+        }
+        fileUrl += item.getmTitle();
+        final String finalFileUrl = fileUrl + "." + item.getmExtension();
+        System.out.println(finalFileUrl);
+        try {
+            FirebaseStorage
+                    .getInstance()
+                    .getReference()
+                    .child(finalFileUrl)
+                    .delete()
+                    .addOnSuccessListener(
+                            new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(Constants.TAG, "File ["
+                                            + finalFileUrl + "] deleted from storage");
+                                }
+                            }
+                    );
+        } catch (Exception e){
+            Log.d(Constants.TAG, e.getMessage() + "\nFile to delete : " + finalFileUrl);
+        }
     }
 
-    private void addToFavorites(final File item) {
+    private void removeFileFromUserUploads(User mUser, final String getmFileId) {
         final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        FirebaseFirestore.getInstance().collection(Constants.DB_USERS)
-                .document(uid).get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        User user = documentSnapshot.toObject(User.class);
-                        if (user != null) {
-                            user.addFavorite(item.getmFileId());
-                            FirebaseFirestore.getInstance().collection(Constants.DB_USERS)
-                                    .document(uid).update("mFavorites", user.getmFavorites());
-                        } else {
-                            Log.d(Constants.TAG, "User == null \n");
+        FirebaseFirestore
+                .getInstance()
+                .collection(Constants.DB_USERS)
+                .document(uid)
+                .update("mUploads", mUser.getmUploads())
+                .addOnSuccessListener(
+                        new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(Constants.TAG, "User's [" + uid +  "] Upload ["
+                                + getmFileId + "] deleted");
+                            }
                         }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(Constants.TAG, e.getMessage() + " \n");
-            }
-        });
+                );
     }
+
+    private void removeFileFromAdapter(File item) {
+        mFiles.remove(item);
+        notifyItemRemoved(mFiles.indexOf(item));
+    }
+
+    private void updateFavorites(User mUser) {
+        final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseFirestore
+                .getInstance()
+                .collection(Constants.DB_USERS)
+                .document(uid)
+                .update("mFavorites", mUser.getmFavorites())
+                .addOnSuccessListener(
+                        new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(Constants.TAG, "User's [" + uid +  "]Favorites Updated");
+                            }
+                        }
+                );
+    }
+
+    public void loadUser(final MyCallBack myCallBack) {
+        final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseFirestore
+                .getInstance()
+                .collection(Constants.DB_USERS)
+                .document(uid)
+                .get()
+                .addOnSuccessListener(
+                        new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    User currentUser = documentSnapshot.toObject(User.class);
+                                    myCallBack.onCallback(currentUser);
+                                }
+                            }
+                        });
+    }
+
 
     private void removeFile(File item) {
 
@@ -281,6 +368,10 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileViewHolder
     @Override
     public int getItemCount() {
         return mFiles.size();
+    }
+
+    public interface MyCallBack {
+        void onCallback(User mUser);
     }
 
     public class FileViewHolder extends RecyclerView.ViewHolder {
